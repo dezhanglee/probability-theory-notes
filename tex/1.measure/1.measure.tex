@@ -1,0 +1,235 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\numberwithin{equation}{subsection}
+\newtheorem{remark}{Remark}
+
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\author{Lee De Zhang}
+\title{Measure Theory, Limit Theorems, and Random Variables}
+\begin{document}
+
+\maketitle
+\section{Introduction}
+This chapter outlines the tools necessary for
+a more rigorous study of probability. 
+
+\section{Measure Theory}
+
+An algebra $\mathcal{F}$ is said to be a $\sigma$-algebra
+if
+\begin{enumerate}
+	\item It is closed under complement, i.e., $A \in \mathcal{F} \Rightarrow A^c \in \mathcal{F}$.
+	\item Closed under countable union, i.e., $A_i \in \mathcal{F} \Rightarrow \cup_i A_i \in \mathcal{F}$ for
+	countable number of $A_i$. 
+\end{enumerate}
+\begin{remark}
+	Countable refers to finite or countably infinite.
+	Some textbooks also state closed under countable 
+	intersection, but it is easy to derive that 
+	from the above conditions. 
+\end{remark}.
+
+We will now state the definition of a probability space
+
+\begin{definition}[\emph{Probability Space}]
+
+A probability space is the triple $(\Omega, \mathcal{F}, P)$,
+such that $\Omega$ is the support or set of all possible
+outcomes (sample space), $\mathcal{F}$ is a set of 
+events, and $P:\mathcal{F}\rightarrow[0,1]$ which assigns
+probabilities to items in $\mathcal{F}$. 
+$\mathcal{F}$
+is a $\sigma$-algebra, which is a non-empty collection 
+of subsets of $\Omega$ and satisfies the properties above. 
+\end{definition} 
+
+Without $P$, the double $(\Omega, \mathcal{F})$ is a 
+measurable space, i.e., something which we can
+assign a measure to. We will define a measure next. 
+
+\begin{definition}[\emph{Measure}]
+A measure is a non-negative countably additive set
+function, such that given a $\sigma$-algebra $\mathcal{F}$
+and a measure $\mu$, then $\mu:\mathcal{F} \rightarrow 
+\mathbb{R}$ such that
+\begin{enumerate}
+	\item $\mu(A) \geq \mu(\emptyset) = 0 \quad \forall A in \mathcal{F}$.
+	\item For $i = 1, 2, \cdots$, if $A_i \in \mathcal{F}$ 
+	is a countable
+	sequence of disjoint sets, then $\mu(\cup A_i) = \sum \mu(A_i)$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+If $\mu(\Omega) = 1$, then $\mu$ is a probability measure. 
+\end{remark}.
+
+From the above definition, we can deduce that a measure
+has the following properties. 
+
+\begin{theorem}[\emph{Properties of a measure}]
+Suppose $\mu$ is some measure on a measurable space 
+$(\Omega, \mathcal{F})$, then $\mu$ satisfies,
+\begin{enumerate}
+	\item Monotonicity. $A\subset B \Rightarrow P(B) - P(A) - P(B-A) \geq 0$ for $A, B \in \mathcal{F}$.
+	\item Subadditivity. For $m = 1, \cdots$, if $A_m \in \mathcal{F}, A \subset \cup_{m=1}^\infty A_m$, then $P(A) \leq \sum_{m=1}^\infty P(A_m)$.
+	\item Continuity from below. If $A_i \uparrow A$, i.e,
+	$A_1\subset A_2 \subset \cdots$ and $\cup A_i = A$, 
+	then $P(A_i) \uparrow P(A)$.
+	\item Continuity from above. If $A_i \downarrow A$, 
+	then $P(A_i) \downarrow P(A)$. 
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	\textbf{Monotonicity}. Since $B-A = B \cap A^c$ and
+	$A$ and $B-A$ are disjoint, then $\mu(A) = \mu(B) + \mu(B-A)$
+	and the result follows from the the non-negativity of 
+	$\mu$. 
+	
+	\textbf{Subadditivity}. Let $B_1 = A_1$ and $B_k =
+	A_k - \cup_{i=1}^{k-1} A_i$, then $\mu(\cup_{i=1}^\infty A_i) = \sum_{i=1}^\infty \mu(B_i)$,
+	 the result follows
+	from monotonicity.
+	
+	\textbf{Continuity from below}. Let $B_k = A_k - A_{k-1}$. Then $\mu(A_k) = \sum_{i=1}^k \mu(B_i)$. Then the 
+	result follows. 
+	
+	\textbf{Continuity from above}. Observe that 
+	$A_i^c \uparrow A$, then $P(A_i^c) \uparrow P(A^c)$
+	and the result follows.
+\end{proof}
+
+To make things a bit more concrete, let us apply this
+to an example on the discrete probability space. 
+
+\begin{example}[\emph{Discrete Probability Spaces}]
+Let $\Omega$ be a countable set, $\mathcal{F}$ be
+the set of all subsets of $\Omega$, for $A \in \mathcal{F}$,
+$P(A) = \sum(x \in A) p(x) \geq 0$ and $\sum_{\omega \in \Omega} p(\omega) = 1$. If $\Omega$ is finite, then 
+$p(\omega) = 1/|\Omega|$. For example, when
+rolling a fair dice, $\Omega = \{1,2,3,4,5,6\}$. 
+\end{example}
+
+\begin{example}[\emph{Measure on continuous real line}]
+Let $\mathbb{R}$ be the real line, $\mathcal{R}$ be
+the Boreal sets (smallest $\sigma$-algebra containing
+the open sets), $\lambda$ be the Lebesgue measure (for
+$a<b$, $\lambda((a, b]) = b-a$, and $\lambda(\mathbb{R})
+= \infty$. To get a probability space, let $\Omega = (0, 1)$,
+$\mathcal{F} = \{A \cap (0,1): A \in \mathcal{R}\}$,
+and $P = \lambda$. Then $P$ is a Lebesgue measure restricted
+to the Borel subsets in interval (0,1). 
+\end{example}
+
+\begin{theorem}[\emph{$\sigma$-algebra closed under arbitrary intersection}] \label{1.thm.sigma.closed}
+If $\mathcal{F}_i, i \in I$ for an arbitrary (possibly
+uncountable) $I$, then $\cap_i \mathcal{F}_i$ is a 
+$\sigma$-algebra. 
+
+\end{theorem}
+
+\begin{proof}
+	Since $\emptyset, \Omega \in \mathcal{F}_i$, 
+	then $\emptyset, \Omega \in \cap \mathcal{F_i}$.
+	Furthermore, $A \in \cap \mathcal{F}_i \Rightarrow A \in \mathcal{F}_i$ hence $\cap \mathcal{F}_i$ closed
+	under intersection and complement. 
+\end{proof}
+
+\begin{definition}[\emph{Smallest $\sigma$-field}]
+	Let $\mathcal{A}$ be a collection of subsets of 
+	$\Omega$. Then there is a smallest $\sigma$-field
+	containing $\mathcal{A}$, written as $\sigma(\mathcal{A})$. 
+\end{definition}
+
+\begin{remark}
+	The existence of $\sigma(\mathcal{A})$ is
+	guaranteed using Theorem \ref{1.thm.sigma.closed}.
+	Namely, let $F_i$ be the different $\sigma$-algebra
+	that contain $\mathcal{A}$. Then an intersection
+	yields the smallest one. 
+\end{remark}
+
+\begin{theorem}[\emph{Measure on Product Spaces}]
+If $(\Omega_i, \mathcal{F}_i, P_i), i = 1, \cdots, n$ are probability spaces,
+let $\Omega = \Omega_1 \times \cdots \times \Omega_n =
+\{(\omega_1, \cdots, \omega_n): \omega_i \in \Omega_i\}$,
+$\mathcal{F} = \prod_{i=1}^n \mathcal{F}_i$ is
+the $\sigma$-field generated by $\{A_1 \times \cdots \times A_n: A_i \in \mathcal{F}_i\}$. Then $P$ is a measure on 
+$\mathcal{F}$, given by, 
+\[
+	P(A_1 \times \cdots \times A_n) = \prod_{i=1}^n P_i(A_i). 
+\]
+\end{theorem}
+
+We can define a random variable on probability spaces. 
+A real valued function $X$ defined on $\Omega$ is a random variable
+if for every borel set $B \subset \mathbb{R}$,
+\[
+	X^{-1}(B) = \{\omega:X(\omega) \in B\} \in \mathcal{F}.
+\]
+
+If $X$ is a random variable, then $X$ induces a probability
+measure on $\mathbb{R}$ called its distribution, by
+setting $\mu(A) = P(X\in A) = P(X^{-1}(A)) =
+P(\{\omega:X(\omega) \in B\})$ for every borel set $B \in 
+\mathbb{R}$. Equivalently, this means taking $X^{-1}(A) \in \mathcal{F}$ and measuring that set. 
+
+The distribution of $X$ can be described using its
+distribution function $F(x) = P(X \leq x)$, which
+has the following properties.
+
+\begin{theorem}[\emph{Properties of Distribution Function}]
+\label{1.prop.distr}
+	All distribution functions $F$ have the following properties,
+	\begin{enumerate}
+		\item $F$ is non-decreasing.
+		\item $\lim_{x\rightarrow\infty} F(x) = 1, \lim_{x \rightarrow - \infty} F(x) = 0$. 
+		\item $F$ is right continuous, $\lim_{y\downarrow  x} F(y) = F(x)$.
+		\item $F(x-) = \lim_{y \uparrow x} F(y) = P(X>x)$.
+		\item $P(X=x) = F(x) - F(X-)$. 
+	\end{enumerate}
+\end{theorem} 
+
+\begin{proof}
+\begin{enumerate}
+	\item Suppose $x < y$ then $\{X < x\} \subset \{X < y\}$
+	therefore $F(x) \leq F(y)$. 
+	\item $\lim {x\rightarrow\infty} \{X < x\} = \Omega$ 
+	and $\lim {x\rightarrow-\infty} \{X < x\} = \emptyset$.
+	\item  $\lim_{y\downarrow  x} \{X < y\} = \{X < x\}$. 
+	\item  $\lim_{y\uparrow  x} \{X < y\} = \{X < x\}$.
+	\item Since $\{X = x\} = \{X \geq x\} \cap \{X < x\}^c$,
+	then taking limits on both sides using 3, 4 gives the 
+	result.  
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+	If $F$ satisfies 1, 2, 3 of Theorem \ref{1.prop.distr}, then
+	it is a distribution function of some random variable. 
+\end{corollary}
+\begin{proof}
+	
+\end{proof}
+\end{document}
