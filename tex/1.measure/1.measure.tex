@@ -29,6 +29,8 @@
 \begin{document}
 
 \maketitle
+\tableofcontents
+
 \section{Introduction}
 This chapter outlines the tools necessary for
 a more rigorous study of probability. 
@@ -192,8 +194,21 @@ if for every borel set $B \subset \mathbb{R}$,
 If $X$ is a random variable, then $X$ induces a probability
 measure on $\mathbb{R}$ called its distribution, by
 setting $\mu(A) = P(X\in A) = P(X^{-1}(A)) =
-P(\{\omega:X(\omega) \in B\})$ for every borel set $B \in 
+P(\{\omega:X(\omega) \in A\})$ for a given Borel set $A \in 
 \mathbb{R}$. Equivalently, this means taking $X^{-1}(A) \in \mathcal{F}$ and measuring that set. 
+In this case, we say that $X$ is $\mathcal{F}$ measurable ($X \in \mathcal{F}$). 
+Furthermore, if $\Omega$ is discrete, then $X:\Omega \rightarrow \mathbb{R}$. 
+
+It is straightforward to verify that $\mu$ is a probability measure on
+$(\mathbb{R}, \mathcal{R}, \mu)$. 
+Let $A_i \in \mathcal{R}$ be arbitrary disjoint sets. Then $X \in \cup A_i$ iff
+$X$ falls in exactly one of the $A_i$. Therefore,
+\[
+	\mu(\cup A_i) = P(X \in \cup A_i) = P(\cup\{X \in A_i\}) = \sum P(X \in A_i) = \sum \mu(A_i). 
+\]
+
+An alternative way of thinking of random variables is that, 
+suppose $X$ is a random variable, then $X\in A = \{\omega: X(\omega) \in A\}$ is whether the realization of $X$ falls in the events contained in $A$.
 
 The distribution of $X$ can be described using its
 distribution function $F(x) = P(X \leq x)$, which
@@ -230,6 +245,204 @@ has the following properties.
 	it is a distribution function of some random variable. 
 \end{corollary}
 \begin{proof}
+
+	We prove this by constructing the random variable.  
+
+	Let $\Omega = (0,1)$, $\mathcal{F} = \text{borel sets}, P = \text{Lebesgue measure}$. For some
+	$\omega \in [0,1]$, let $X(\omega) = \sup \{y:F(y) < w\}$. Then, $\{\omega: X(\omega) < x\} = \{\omega:\omega < F(x)\}$,
+	then $P(\omega:\omega\leq F(x)) = F(x)$ such that $P$ is the Lebesgue measure. The result then follows. 
+\end{proof}
+
+The above result is used to generate random variables from
+a uniform random variable. 
+
+\begin{corollary}
+	Furthermore, if $F$ satisfies 1, 2, 3 of Theorem \ref{1.prop.distr}, then 
+	there is a unique probability measure $\mu$ on $(\mathbb{R}, \mathcal{R})$ such that
+	$\mu((a, b]) = F(b) - F(a)$ for $b>a$. 
+\end{corollary}
+
+
+\begin{definition}[\emph{Equal in Distribution}]
+	Given two random variables $X$ and $Y$ on a common probability space. 
+	If both induce the same distribution $\mu$ on the probability space, 
+	i.e. for any $x$, $P(X<x) = P(Y<x)$, then we say both are equal
+	in distribution, written as $X \stackrel{d}{=} Y$. 
+\end{definition}
+
+Finally, the density function $f$ of a random variable $X$ is given by, 
+\[
+	P(X=x) = \lim_{\epsilon \rightarrow 0} \int^{x+\epsilon}_{x-\epsilon} f(y) \, dy. 
+\]
+and its relationship with $F$ is,
+\[
+	F(x) = \int_{-\infty}^x f(x) \, dx. 
+\]
+
+\begin{example}[\emph{Uniform Distribution on Cantor Set}]
+	The cantor set $C$ is defined by removing $(1/3, 2/3)$ from
+	$[0,1]$, and recursively removing the middle third of each interval
+	that remains. Suppose we assign the distribution function such that
+	\begin{itemize}
+		\item $F(0) = 0$,
+		\item $F(x) = 1/2$ for $x \in [1/3, 2/3]$,
+		\item $F(x) = 1/4$ for $x \in [1/9, 2/9]$. 
+		\item and so on...
+	\end{itemize}
+	The $F$ that results is known as Lebesgue's singular function,
+	because there is no $f$ such that $F(x) = \int_{-\infty}^x f(x) \, dx$. It is also immediate that $\mu(C^c) = 0$. 
+\end{example}
+
+\begin{definition}[\emph{Discrete Probability Measure}]
+A probability measure $P$ is said to be discrete if there is a 
+countable set $S$ such that $P(S^c) = 0$.
+\end{definition}
+
+We list an interesting example of a discrete probability measure
+\begin{example}[\emph{Dense discontinuities}]
+	Let $q_1, q_2, \cdots$ be an enumeration of all the rationals, and
+	\[
+		F(x) = \sum_{i=1}^\infty \frac{1}{2^i} 1_{[q_i, \infty)}. 
+	\]
+	Then, let,
+	\[
+		S = \{q_i: i = 1, 2, \cdots\}, 
+	\]
+	such that $S^c = \mathbb{R} - \mathbb{Q}$. For any $x \in S^c$, 
+	$P(X = x) = 0$, hence $X$ is discrete.
+\end{example}
+
+
+\section{Random Variables}
+
+We proceed to prove that random variables are indeed measurable. 
+
+\begin{definition}[\emph{Measurable Map}]
+	A function $X: \Omega \rightarrow S$ is a measurable map from $(\Omega, \mathcal{F})$ to
+	$(S, \mathcal{S})$ if,
+	\[
+		X^{-1}(B) = \{\omega: X(\omega) \in B\} \in \mathcal{F},
+	\]
+	for all $B \in \mathcal{S}$. 
+\end{definition}
+
+\begin{theorem}
+	If $\{\omega: X(\omega) \in A\} \in \mathcal{F}$ for all $A \in \mathcal{A}$ and
+	$S = \sigma(\mathcal{A})$, then $X$ is measurable. 
+\end{theorem}
+
+\begin{proof}
+	We introduce the notation $\{X \in B \} = \{\omega: X(\omega) \in B\}$. Therefore,
+	$\{X \in \cup B_i\} = \cup \{X \in B_i\}$ and $\{X \in B^c\} = \{X \in B\}^c$,
+	so closure under complement and arbitrary union means $\mathcal{B} = 
+	\{B:\{X \in B\} \in \mathcal{F}\}$ is a $\sigma$-algebra. Since $\mathcal{A} \subset \mathcal{B}$ and $\mathcal{A} \subset \mathcal{S} = \sigma(\mathcal{A})$, then
+	by definition, $\sigma(\mathcal{A}) = \mathcal{S} \subset \mathcal{B}$. 
+\end{proof}
+
+
+\begin{corollary}[\emph{$\sigma$-field generated by $X$}]
+	If $\mathcal{S}$ is a $\sigma$-field, then $\{\{X \in B\} : B \in \mathcal{S}\}$
+	is a $\sigma$-field. It is the smallest $\sigma$ field on $\Omega$ which makes $X$ a 
+	measurable map, known as the $\sigma$-field generated by $X$, $\sigma(X)$. 
+\end{corollary}
+
+\begin{theorem}
+	If $X: (\Omega, \mathcal{F}) \rightarrow (S, \mathcal{S})$ and
+	$f:(S, \mathcal{S}) \rightarrow (T, \mathcal{T})$ are measurable maps, 
+	then $f(X)$ is a measurable map from $(\Omega, \mathcal{F})$ to 
+	$(T, \mathcal{T})$
+\end{theorem}
+
+\begin{proof}
+	Let $B \in \mathcal{T}$ and hence $f^{-1}(B) \in \mathcal{S}$. Therefore
+	\[
+		\{\omega:f(X(\omega)) \in B\} = \{\omega: X(\omega) \in f^{-1}(B)\}. 
+	\]
+\end{proof}
+
+\begin{theorem}
+	If $X_1, \cdots, X_n$ are random variables on $(\Omega, \mathcal{F})$, $f:(\mathbb{R}^n, \mathcal{R}^n) \rightarrow (\mathbb{R}, \mathcal{R})$ is measurable, then $f(X_1, \cdots, X_n)$ is a random variable. 
+\end{theorem}
+
+\begin{proof}
+	Let $A_i$ be Borel sets, then 
+	\[
+		\{(X_1, \cdots, X_n) \in A_1 \times \cdots \times A_n\} = \cap \{X_i \in A_i\} \in \mathcal{F},
+	\]
+	and since $A_1 \times \cdots \times A_n$ generate $\mathcal{R}^n$ the result follows.
+\end{proof}
+
+
+\begin{theorem}
+	If $X_1, \cdots $ are random variables, then so are $\inf X_n, \sup X_n, \limsup X_n, \liminf X_n$. 
+\end{theorem}
+
+\begin{proof}
+	$\inf$ and $\sup$ can be proved similarly. We observe that
+	\[
+		\{ \sup X_n < x\} = \cap \{X_i < x\}\in \mathcal{F},
+	\]
+	and 
+	\[
+		\liminf X_n = \sup_n \inf_{m>n} X_m,
+	\]
+	and since $\inf_{m>n} X_m \in \mathcal{F}$ so $\sup_n \inf_{m>n} X_m \in \mathcal{F}$.
 	
 \end{proof}
+
+
+\begin{definition}[\emph{Almost sure convergence}]
+	$X_n \stackrel{a.s.}{\rightarrow}$ iff 
+	\[
+		P\left(\{\omega: \liminf X_n = \limsup X_n\} \right),
+	\]
+	that is, $\lim X_n$ exists. 
+\end{definition}
+
+
+\section{Expected Value}
+
+Given a random variable $X \geq 0$ on $(\Omega, \mathcal{F}, P)$, then we define expectation
+as $E\, X = \int X \, dP$. 
+
+\begin{definition}[\emph{$x^+$ and $x^-$}]
+	Define the positive part $x^+ = \max (x, 0) $ and $x^- = \max (0, -x)$. 
+\end{definition}
+
+\begin{remark}
+	$E\, X$ exists iff $E\, X = E\, X^+ - E\, X^-$ exists, i.e., both terms on right
+	exist. 
+\end{remark}
+
+\begin{theorem}
+	Suppose $X, Y \geq 0$ or $E|X|, E|Y| < \infty$. Then, 
+	\begin{itemize}
+		\item $E(X+Y)= E(X)+E(Y)$
+		\item $E(aX+b) = aE(X) + b$
+		\item $X \geq Y$ then $E(X) \geq E(Y)$. 
+	\end{itemize}
+\end{theorem}
+
+\begin{theorem}
+	Suppose $E|X|, E|Y| < \infty$, then
+	$EX = EY$ iff $X = Y$ a.s.
+\end{theorem}
+
+\begin{proof}
+	Since $X \geq Y$ then $X - Y \geq 0$, So,
+	$E|X-Y| = E(X-Y) = EX-EY=0$ hence for all 
+	$\epsilon > 0, P(|X-Y| > \epsilon) = 0$. 
+\end{proof}
+
+
+\begin{theorem}[\emph{Fatou's Lemma}]
+	If $X_n> 0$ then $\liminf EX_n \geq E \liminf X_n$.
+\end{theorem}
+
+\begin{theorem}[\emph{Monotone Convergence Theorem}]
+	If $0 \leq X_n \uparrow X$ then $EX_n \uparrow EX$.
+\end{theorem}
+
+
+
 \end{document}
